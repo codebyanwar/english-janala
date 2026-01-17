@@ -7,13 +7,76 @@ const lessonFunction =()=>{
     })
 }
 
+const removeActive=()=>{
+    const lessonButtons = document.querySelectorAll('.lesson-btn');
+    lessonButtons.forEach(button=>button.classList.remove('active'))
+}
+
 const loadWord=(levelID)=>{
     const url = `https://openapi.programming-hero.com/api/level/${levelID}`
     fetch(url)
     .then(response=>response.json())
     .then(promiseData=>{
+        removeActive();
+        const lessonBTN = document.getElementById(`lesson-btn-${levelID}`);
+        lessonBTN.classList.add('active');
         displayWordCard(promiseData.data);
     })
+}
+
+const loadWordDatils=async(id)=>{
+    const url = `https://openapi.programming-hero.com/api/word/${id}`
+    const rest= await fetch(url);
+    const ditails = await rest.json();
+    displayWordDatails(ditails.data);
+}
+
+// {
+//     "word": "Cautious",
+//     "meaning": "সতর্ক",
+//     "pronunciation": "কশাস",
+//     "level": 2,
+//     "sentence": "Be cautious while crossing the road.",
+//     "points": 2,
+//     "partsOfSpeech": "adjective",
+//     "synonyms": [
+//         "careful",
+//         "alert",
+//         "watchful"
+//     ],
+//     "id": 3
+// }
+
+const displayWordDatails=(word)=>{
+    console.log(word);
+    const cardDatailsContainer = document.getElementById('display-word-datils-container');
+    cardDatailsContainer.innerHTML= `
+        <div>
+            <h2 class="text-2xl font-bold mb-5">${word.word} (<span class="bangla-font"><i class="fa-solid fa-microphone"></i> :${word.pronunciation} )</span></h2>
+            <h3 class="text-xl font-semibold">Meaning</h3>
+            <p class="text-lg bangla-font">${word.meaning}</p>
+        </div>
+
+        <div>
+            <h3 class="text-xl font-semibold">Example</h3>
+            <p class="text-lg">${word.sentence}</p>
+        </div>
+
+        <div>
+            <p class="text-lg bangla-font mb-3">সমার্থক শব্দ গুলো</p>
+            <div class="">
+                <span class="btn">${word.synonyms[0]}</span>
+                <span class="btn">${word.synonyms[1]}</span>
+                <span class="btn">${word.synonyms[2]}</span>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('card_modal').showModal();
+
+    // words.forEach(word=>{
+    //     console.log(word);
+    // })
 }
 
 const displayLesson=(lessons)=>{
@@ -23,7 +86,7 @@ const displayLesson=(lessons)=>{
     lessons.forEach(lesson=>{
         const createDiv = document.createElement('div');
         createDiv.innerHTML= `
-            <button onclick='loadWord(${lesson.level_no})' class="btn btn-outline btn-primary"><i class="fa-solid fa-book"></i>lesson- ${lesson.level_no}</button>
+            <button id='lesson-btn-${lesson.level_no}' onclick='loadWord(${lesson.level_no})' class="btn btn-outline btn-primary lesson-btn"><i class="fa-solid fa-book"></i>lesson- ${lesson.level_no}</button>
         `
         levelContainer.append(createDiv);
     })
@@ -47,11 +110,11 @@ const displayWordCard=(words)=>{
         const wordDiv = document.createElement('div')
         wordDiv.innerHTML= `
             <div class="card py-10 px-8 flex flex-col items-center bg-white border border-solid border-[#422AD5]">
-                <h2 class="text-[28px] mb-3 text-black font-bold">${word.word}</h2>
+                <h2 class="text-[28px] mb-3 text-black font-bold">${word.word ? word.word : "শব্দ পাওয়া যায়নি"}</h2>
                 <p class="text-[16px] mb-10 text-black font-semibold">${word.pronunciation}</p>
-                <h2 class="text-2xl text-[#18181B] bangla-font font-bold">${word.meaning}</h2>
+                <h2 class="text-2xl text-[#18181B] bangla-font font-bold">${word.meaning ? word.meaning : "শব্দ পাওয়া যায়নি"}</h2>
                 <div class="flex justify-between items-center mt-10 w-full">
-                  <button class='text-[20px] bg-[#E7F3FE] px-4 py-3 rounded-lg hover:bg-[#422AD5] hover:text-white'><i class="fa-solid fa-circle-info"></i></button>
+                  <button onClick='loadWordDatils(${word.id})' class='text-[20px] bg-[#E7F3FE] px-4 py-3 rounded-lg hover:bg-[#422AD5] hover:text-white'><i class="fa-solid fa-circle-info"></i></button>
                   <button class='text-[20px] bg-[#E7F3FE] px-4 py-3 rounded-lg hover:bg-[#422AD5] hover:text-white'><i class="fa-solid fa-volume-high"></i></button>
                 </div>
             </div>

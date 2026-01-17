@@ -98,19 +98,43 @@
     </div>
 
     <section class="py-12 md:py-[80px]">
-        <div class="md:max-w-7xl md:mx-auto mx-[4%]">
-            <h2 class="text-4xl md:text-5xl text-[#18181B] font-bold text-center"><span class="text-[#00BCFF] ">Let's</span> Learn Vocabularies</h2>
+      <div class="md:max-w-7xl md:mx-auto mx-[4%]">
+          <h2 class="text-4xl md:text-5xl text-[#18181B] font-bold text-center"><span class="text-[#00BCFF] ">Let's</span> Learn Vocabularies</h2>
 
-            <div id="level-container" class="flex gap-3 my-10 justify-center flex-wrap">
+          <div id="level-container" class="flex gap-3 my-10 justify-center flex-wrap">
 
+          </div>
+
+          <div id="card-container" class="bg-[#F8F8F8] p-5 rounded-2xl my-5 grid grid-cols-3 gap-5">
+            <div class="bg-[#F8F8F8] rounded-xl p-10 text-center col-span-3 space-y-8">
+                <p class="text-xl">আপনি এখনো কোন Lesson Select করেন নি</p>
+                <h2 class="text-4xl">একটি Lesson Select করুন।</h2>
             </div>
-
-            <div id="card-container" class="bg-[#F8F8F8] p-5 rounded-2xl my-5 grid grid-cols-3 gap-5">
-            </div>
+          </div>
         </div>
     </section>
 
 
+    <section class="py-12 md:py-[80px]">
+      <div class="md:max-w-7xl md:mx-auto mx-[4%]">
+        <!-- Open the modal using ID.showModal() method -->
+        <!-- <button class="btn" onclick="my_modal_5.showModal()">open modal</button> -->
+        <dialog id="card_modal" class="modal modal-bottom sm:modal-middle">
+          <div class="modal-box">
+            <div id="display-word-datils-container" class="space-y-5">
+              
+            </div>
+
+            <div class="modal-action justify-start">
+              <form method="dialog text-start">
+                <!-- if there is a button in form, it will close the modal -->
+                <button class="btn btn-outline btn-primary">Complete Learning</button>
+              </form>
+            </div>
+          </div>
+        </dialog>
+      </div>
+    </section>
 
     <script src="./script/index.js"></script>
   </body>
