@@ -3,6 +3,12 @@ const createElement=(arr)=>{
     return htmlElements.join(' ');
 };
 
+function pronounceWord(word) {
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = "en-EN"; // English
+  window.speechSynthesis.speak(utterance);
+}
+
 const manageSpinner=(status)=>{
     if(status===true){
         document.getElementById('spinner').classList.remove('hidden');
@@ -129,7 +135,7 @@ const displayWordCard=(words)=>{
                 <h2 class="text-2xl text-[#18181B] bangla-font font-bold">${word.meaning ? word.meaning : "শব্দ পাওয়া যায়নি"}</h2>
                 <div class="flex justify-between items-center mt-10 w-full">
                   <button onClick='loadWordDatils(${word.id})' class='text-[20px] bg-[#E7F3FE] px-4 py-3 rounded-lg hover:bg-[#422AD5] hover:text-white'><i class="fa-solid fa-circle-info"></i></button>
-                  <button class='text-[20px] bg-[#E7F3FE] px-4 py-3 rounded-lg hover:bg-[#422AD5] hover:text-white'><i class="fa-solid fa-volume-high"></i></button>
+                  <button onClick="pronounceWord('${word.word}')" class='text-[20px] bg-[#E7F3FE] px-4 py-3 rounded-lg hover:bg-[#422AD5] hover:text-white'><i class="fa-solid fa-volume-high"></i></button>
                 </div>
             </div>
         `
@@ -139,3 +145,22 @@ const displayWordCard=(words)=>{
 }
 
 lessonFunction();
+
+
+document.getElementById('btn-search').addEventListener('click', ()=>{
+    removeActive();
+    const input = document.getElementById('input-search');
+    const searchValue = input.value.trim().toLowerCase();
+    // console.log(searchValue);
+
+    fetch('https://openapi.programming-hero.com/api/words/all')
+    .then(response=>response.json())
+    .then(data=>{
+        const allWords = data.data;
+        const filterWords = allWords.filter((word)=>{
+            return word.word.toLowerCase().includes(searchValue);
+        });
+        displayWordCard(filterWords);
+    });
+    
+})
